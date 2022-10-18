@@ -13,7 +13,6 @@ var router = gin.Default()
 
 func getRoutes() {
 	task_group := router.Group("/api")
-	// call the function addTasksRoutes from tasks/controller.go
 	tasks.AddTasksRoutes(task_group)
 }
 
