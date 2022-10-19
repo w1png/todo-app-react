@@ -7,7 +7,7 @@ import (
 )
 
 type Task struct {
-	ID        string
+	ID        int
 	cookie    string
 	Title     string
 	Completed bool
@@ -92,5 +92,5 @@ func getTask(id int) Task {
 }
 
 func doesTaskExist(id int) bool {
-	return getTask(id).ID != ""
+	return getTask(id).ID != 0
 }
