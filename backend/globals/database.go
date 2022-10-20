@@ -10,7 +10,7 @@ func Init() {
 	db := Connect()
 	defer db.Close()
 
-	statement := "CREATE TABLE IF NOT EXISTS tasks (id PRIMARY KEY, title TEXT, completed BOOLEAN, due_date TEXT);"
+	statement := "CREATE TABLE IF NOT EXISTS tasks (id INTEGER PRIMARY KEY, cookie TEXT, title TEXT, completed BOOLEAN);"
 	_, err := db.Exec(statement)
 	if err != nil {
 		panic(err)

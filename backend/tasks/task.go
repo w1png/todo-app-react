@@ -1,17 +1,14 @@
 package tasks
 
 import (
-	"time"
-
 	"github.com/w1png/todo-app/globals"
 )
 
 type Task struct {
-	ID        int
-	cookie    string
-	Title     string
-	Completed bool
-	Due       time.Time
+	ID        int    `json:"id"`
+	Cookie    string `json:"cookie"`
+	Title     string `json:"title"`
+	Completed bool   `json:"completed"`
 }
 
 func (t *Task) setCompleted(completed bool) {
@@ -34,10 +31,10 @@ func createTask(task Task) Task {
 	db := globals.Connect()
 	defer db.Close()
 
-	db.Exec("INSERT INTO tasks (title, completed, due) VALUES (?, ?, ?)", task.Title, task.Completed, task.Due)
+	db.Exec("INSERT INTO tasks (title, completed, due_date) VALUES (?, ?, ?)", task.Title, task.Completed)
 
 	// return the task with the ID
-	rows, err := db.Query("SELECT id FROM tasks WHERE title = ? AND completed = ? AND due = ? AND cookie = ?", task.Title, task.Completed, task.Due, task.cookie)
+	rows, err := db.Query("SELECT id FROM tasks WHERE title = ? AND completed = ? AND cookie = ?", task.Title, task.Completed, task.Cookie)
 	if err != nil {
 		panic(err)
 	}
@@ -54,7 +51,7 @@ func getTasks(cookie string) []Task {
 	db := globals.Connect()
 	defer db.Close()
 
-	rows, err := db.Query("SELECT id, title, completed, due FROM tasks WHERE cookie = ?", cookie)
+	rows, err := db.Query("SELECT id, title, completed FROM tasks WHERE cookie = ?", cookie)
 	if err != nil {
 		panic(err)
 	}
@@ -63,7 +60,7 @@ func getTasks(cookie string) []Task {
 	var tasks []Task
 	for rows.Next() {
 		var task Task
-		rows.Scan(&task.ID, &task.Title, &task.Completed, &task.Due)
+		rows.Scan(&task.ID, &task.Title, &task.Completed)
 		tasks = append(tasks, task)
 	}
 
@@ -77,7 +74,7 @@ func getTask(id int) Task {
 	db := globals.Connect()
 	defer db.Close()
 
-	rows, err := db.Query("SELECT * FROM tasks WHERE id = ?", id)
+	rows, err := db.Query("SELECT id, title, completed FROM tasks WHERE id = ?", id)
 	if err != nil {
 		panic(err)
 	}
@@ -85,7 +82,7 @@ func getTask(id int) Task {
 
 	var task Task
 	for rows.Next() {
-		rows.Scan(&task.ID, &task.Title, &task.Completed, &task.Due)
+		rows.Scan(&task.ID, &task.Title, &task.Completed)
 	}
 
 	return task
