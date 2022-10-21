@@ -21,5 +21,6 @@ export function createTask(task: Task): Promise<Task> {
     const headers = {
         'Content-Type': 'application/json',
     };
+    const json = `{"id": ${task.id}, "cookie": "${task.cookie}", "title": "${task.title}", "completed": ${task.completed}}`;
     return axios.post('/api/tasks', task, { headers }).then((res: any) => res.data);
 }
