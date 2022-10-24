@@ -1,11 +1,8 @@
 package main
 
 import (
-	"os"
-
 	"github.com/gin-gonic/gin"
 
-	"github.com/w1png/todo-app/globals"
 	"github.com/w1png/todo-app/tasks"
 )
 
@@ -17,10 +14,6 @@ func getRoutes() {
 }
 
 func main() {
-	if _, err := os.Stat("./database.db"); os.IsNotExist(err) {
-		globals.Init()
-	}
-
 	getRoutes()
 	router.Run()
 }

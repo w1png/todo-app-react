@@ -15,12 +15,16 @@ func AddTasksRoutes(router_group *gin.RouterGroup) {
 	router.POST("", createTaskAPI)
 }
 
+func noUserIDCookie(c *gin.Context) {
+	c.JSON(401, gin.H{
+		"error": "No user_id cookie",
+	})
+}
+
 func createTaskAPI(c *gin.Context) {
 	cookie, err := c.Cookie("user_id")
 	if err != nil {
-		c.JSON(401, gin.H{
-			"error": "Unauthorized",
-		})
+		noUserIDCookie(c)
 		return
 	}
 
@@ -31,18 +35,15 @@ func createTaskAPI(c *gin.Context) {
 		})
 	}
 	task.Cookie = cookie
-	task = createTask(task)
+	task = createTask(task.Title, task.Cookie)
 	fmt.Printf("ID: %d, Cookie: %s, Title: %s, Completed: %t", task.ID, cookie, task.Title, task.Completed)
 	c.JSON(200, task)
 }
 
 func getTasksAPI(c *gin.Context) {
-	// get cookie named "user_id"
 	cookie, err := c.Cookie("user_id")
 	if err != nil {
-		c.JSON(400, gin.H{
-			"error": "No cookie named 'user_id'",
-		})
+		noUserIDCookie(c)
 		return
 	}
 	c.JSON(200, getTasks(cookie))
@@ -62,7 +63,5 @@ func deleteTaskAPI(c *gin.Context) {
 	}
 
 	Task{ID: id}.delete()
-	c.JSON(200, gin.H{
-		"message": "Task deleted",
-	})
+	c.JSON(200, nil)
 }

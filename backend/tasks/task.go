@@ -2,88 +2,49 @@ package tasks
 
 import (
 	"github.com/w1png/todo-app/globals"
+
+	"gorm.io/gorm"
 )
 
 type Task struct {
+	gorm.Model
 	ID        int    `json:"id"`
 	Cookie    string `json:"cookie"`
 	Title     string `json:"title"`
 	Completed bool   `json:"completed"`
 }
 
-func (t *Task) setCompleted(completed bool) {
-	t.Completed = completed
-
+func (task Task) setCompleted(completed bool) {
 	db := globals.Connect()
-	defer db.Close()
-
-	db.Exec("UPDATE tasks SET completed = ? WHERE id = ?", completed, t.ID)
+	db.Model(&task).Update("Completed", completed)
 }
 
-func (t Task) delete() {
+func (task Task) delete() {
 	db := globals.Connect()
-	defer db.Close()
-
-	db.Exec("DELETE FROM tasks WHERE id = ?", t.ID)
+	db.Delete(&task, task.ID)
 }
 
-func createTask(task Task) Task {
+func createTask(title string, cookie string) Task {
 	db := globals.Connect()
-	defer db.Close()
-
-	db.Exec("INSERT INTO tasks (title, completed, due_date) VALUES (?, ?, ?)", task.Title, task.Completed)
-
-	// return the task with the ID
-	rows, err := db.Query("SELECT id FROM tasks WHERE title = ? AND completed = ? AND cookie = ?", task.Title, task.Completed, task.Cookie)
-	if err != nil {
-		panic(err)
-	}
-	defer rows.Close()
-
-	for rows.Next() {
-		rows.Scan(&task.ID)
-	}
-
+	task := Task{Title: title, Cookie: cookie, Completed: false}
+	db.Create(&task)
 	return task
 }
 
 func getTasks(cookie string) []Task {
 	db := globals.Connect()
-	defer db.Close()
-
-	rows, err := db.Query("SELECT id, title, completed FROM tasks WHERE cookie = ?", cookie)
-	if err != nil {
-		panic(err)
-	}
-	defer rows.Close()
 
 	var tasks []Task
-	for rows.Next() {
-		var task Task
-		rows.Scan(&task.ID, &task.Title, &task.Completed)
-		tasks = append(tasks, task)
-	}
+	db.Model(&Task{}).Where("cookie = ?", cookie).Find(&tasks)
 
-	if len(tasks) == 0 {
-		tasks = []Task{}
-	}
 	return tasks
 }
 
 func getTask(id int) Task {
 	db := globals.Connect()
-	defer db.Close()
-
-	rows, err := db.Query("SELECT id, title, completed FROM tasks WHERE id = ?", id)
-	if err != nil {
-		panic(err)
-	}
-	defer rows.Close()
 
 	var task Task
-	for rows.Next() {
-		rows.Scan(&task.ID, &task.Title, &task.Completed)
-	}
+	db.First(&task, id)
 
 	return task
 }
