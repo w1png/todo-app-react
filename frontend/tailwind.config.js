@@ -8,14 +8,10 @@ module.exports = {
   theme: {
     colors: {
       'bgprimary': '#141414',
-      'bgsecondary': '#292929',
-      'primary': '#A2DEBD',
-      'secondary': '#93CAAC',
-      'accent': '#5B7969'
+      'primary': '#fb4934',
     },
     fontFamily: {
-      'primary': ['VT323', 'monospace'],
-      'secondary': ['Oswald', 'sans-serif'],
+      "primary": ["Noto Serif", "serif"],
     },
     extend: {},
   },

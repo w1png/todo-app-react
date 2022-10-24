@@ -1,3 +1,16 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+body {
+    @apply font-primary tracking-wide text-2xl text-primary;
+    @apply bg-bgprimary;
+}
+
+h1 {
+    @apply text-4xl;
+}
+
+h2 {
+    @apply text-2xl;
+}
