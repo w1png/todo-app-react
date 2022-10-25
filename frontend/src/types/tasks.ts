@@ -7,9 +7,9 @@ export type Task = {
     completed: boolean;
 };
 
+// handle errors
 export async function getTasks(): Promise<Task[]> {
-    const tasks = axios.get('/api/tasks').then((response: any) => response.data);
-    return tasks;
+    return axios.get('/api/tasks').then((response: any) => response.data);
 }
 
 export async function deleteTask(): Promise<void> {
