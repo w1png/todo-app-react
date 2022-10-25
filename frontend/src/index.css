@@ -3,8 +3,7 @@
 @tailwind utilities;
 
 body {
-    @apply font-primary tracking-wide text-2xl text-primary;
-    @apply bg-bgprimary;
+    @apply font-primary tracking-wide text-2xl;
 }
 
 h1 {

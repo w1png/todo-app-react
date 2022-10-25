@@ -6,10 +6,6 @@ module.exports = {
     'node_modules/flowbite-react/**/*.{js,jsx,ts,tsx}'
   ],
   theme: {
-    colors: {
-      'bgprimary': '#141414',
-      'primary': '#fb4934',
-    },
     fontFamily: {
       "primary": ["Noto Serif", "serif"],
     },
