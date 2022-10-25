@@ -1,6 +1,10 @@
-const ErrorComponent = () => {
+type ErrorComponentProps = {
+    error: string;
+};
+
+const ErrorComponent = ({ error }: ErrorComponentProps) => {
     return (
-        <p>error</p>
+        <p className='text-red-400'>{error}</p>
     )
 }
 
