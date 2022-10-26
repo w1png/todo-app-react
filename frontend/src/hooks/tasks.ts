@@ -6,6 +6,10 @@ const useTasks = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(false);
 
+    const addTask = (task: Task) => {
+        setTasks([...tasks, task]);
+    };
+
     useEffect(() => {
         getTasks().then((tasks) => {
             setTasks(tasks);
@@ -17,7 +21,7 @@ const useTasks = () => {
         });
     }, []);
 
-    return { tasks, loading, error }; 
+    return { tasks, loading, error, addTask };
 };
 
 export default useTasks;

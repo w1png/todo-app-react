@@ -1,17 +1,15 @@
-import { v4 as uuid } from 'uuid';
-import { useEffect } from 'react';
-
 import useTasks from '../hooks/tasks';
 import useCookies from '../hooks/cookies';
 
 import TaskCard from '../components/TaskCard';
 import ErrorComponent from '../components/ErrorComponent';
 import LoadingComponent from '../components/LoadingComponent';
-import InputForm from '../components/InputForm';
+import InputForm from '../components/CreateTask';
+import CreateTask from '../components/CreateTask';
 
 const MainPage = () => {
     useCookies();
-    const { tasks, error, loading } = useTasks();
+    const { tasks, error, loading, addTask } = useTasks();
 
     return (
         <div className='container mx-auto'>
@@ -21,7 +19,7 @@ const MainPage = () => {
                 {error && <ErrorComponent error='Error loading tasks' />}
             </div>
 
-            <InputForm />
+            <CreateTask onCreate={addTask} />
 
             <div className='border-2 rounded-lg mt-5 lg:w-1/2 lg:mx-auto mr-3 ml-3 invisible' id='task_list'>
                 {tasks.length === 0 ? (
