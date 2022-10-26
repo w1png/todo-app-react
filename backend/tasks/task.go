@@ -37,6 +37,9 @@ func getTasks(cookie string) []Task {
 	var tasks []Task
 	db.Model(&Task{}).Where("cookie = ?", cookie).Find(&tasks)
 
+	if tasks == nil {
+		return []Task{}
+	}
 	return tasks
 }
 

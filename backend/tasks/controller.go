@@ -1,7 +1,6 @@
 package tasks
 
 import (
-	"fmt"
 	"strconv"
 
 	"github.com/gin-gonic/gin"
@@ -36,7 +35,6 @@ func createTaskAPI(c *gin.Context) {
 	}
 	task.Cookie = cookie
 	task = createTask(task.Title, task.Cookie)
-	fmt.Printf("ID: %d, Cookie: %s, Title: %s, Completed: %t", task.ID, cookie, task.Title, task.Completed)
 	c.JSON(200, task)
 }
 
