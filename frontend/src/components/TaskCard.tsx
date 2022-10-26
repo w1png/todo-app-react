@@ -6,7 +6,7 @@ type TaskCardProps = {
 
 const TaskCard = ({ task }: TaskCardProps) => {
     return (
-        <p>test</p>
+        <p>{task.title}</p>
     )
 }
 
