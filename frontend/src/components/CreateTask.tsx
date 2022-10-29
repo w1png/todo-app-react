@@ -46,7 +46,6 @@ const CreateTask = ({onCreate}: CreateTaskProps) => {
                     <input className='border-2 border-gray-300 p-2 rounded-md' type='text' value={taskName} onChange={onChangeInput} />
                     {error && <ErrorComponent error='Error creating task' size="sm"/>}
                     <button className='border-2 bg-gray-200 hover:bg-gray-100 text-gray-400 font-bold py-2 px-4 rounded mt-2' onClick={onClickAdd}>Add</button>
-
                 </div>
             </div>
         </>

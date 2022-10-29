@@ -19,11 +19,6 @@ func (task Task) setCompleted(completed bool) {
 	db.Model(&task).Update("Completed", completed)
 }
 
-func (task Task) delete() {
-	db := globals.Connect()
-	db.Delete(&task, task.ID)
-}
-
 func createTask(title string, cookie string) Task {
 	db := globals.Connect()
 	task := Task{Title: title, Cookie: cookie, Completed: false}
@@ -35,7 +30,7 @@ func getTasks(cookie string) []Task {
 	db := globals.Connect()
 
 	var tasks []Task
-	db.Model(&Task{}).Where("cookie = ?", cookie).Find(&tasks)
+	db.Where("cookie = ? AND completed = ?", cookie, false).Find(&tasks)
 
 	if tasks == nil {
 		return []Task{}

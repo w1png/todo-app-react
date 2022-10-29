@@ -4,7 +4,6 @@ import useCookies from '../hooks/cookies';
 import TaskCard from '../components/TaskCard';
 import ErrorComponent from '../components/ErrorComponent';
 import LoadingComponent from '../components/LoadingComponent';
-import InputForm from '../components/CreateTask';
 import CreateTask from '../components/CreateTask';
 
 const MainPage = () => {
@@ -25,11 +24,14 @@ const MainPage = () => {
                 {tasks.length === 0 ? (
                     <h2 className='text-center'>No tasks yet! c:</h2>
                 ) : (
-                    <div className="items-center">
+                    // display items in a styled list
+                    <div>
                         {tasks.map((task) => (
-                            <TaskCard task={task} />
+                            <TaskCard key={task.id} task={task} />
                         ))}
                     </div>
+
+
                 )}        
             </div>
         </div>

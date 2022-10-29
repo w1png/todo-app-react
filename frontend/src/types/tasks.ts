@@ -11,8 +11,9 @@ export async function getTasks(): Promise<Task[]> {
     return axios.get('/api/tasks').then((response: any) => response.data);
 }
 
-export async function deleteTask(): Promise<void> {
-    return axios.delete('/api/tasks').then((res: any) => res.data);
+export async function setTaskCompleted(id: number, completed: boolean): Promise<Task> {
+    const url = `/api/tasks/${id}/complete${completed ? '' : '?completed=false'}`;
+    return axios.post(url).then((response: any) => response.data);
 }
 
 export async function createTask(title: string, cookie: string): Promise<Task> {

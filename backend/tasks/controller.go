@@ -10,7 +10,7 @@ func AddTasksRoutes(router_group *gin.RouterGroup) {
 	router := router_group.Group("/tasks")
 
 	router.GET("", getTasksAPI)
-	router.DELETE("/:id", deleteTaskAPI)
+	router.POST("/:id/complete", setTaskCompletedAPI)
 	router.POST("", createTaskAPI)
 }
 
@@ -47,19 +47,38 @@ func getTasksAPI(c *gin.Context) {
 	c.JSON(200, getTasks(cookie))
 }
 
-func deleteTaskAPI(c *gin.Context) {
+func setTaskCompletedAPI(c *gin.Context) {
+	cookie, err := c.Cookie("user_id")
+	if err != nil {
+		noUserIDCookie(c)
+		return
+	}
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
 		c.JSON(400, gin.H{
-			"error": "ID must be an integer",
+			"error": "Invalid task id",
 		})
+		return
 	}
 	if !doesTaskExist(id) {
 		c.JSON(404, gin.H{
-			"error": "Task does not exist",
+			"error": "Task not found",
 		})
+		return
 	}
 
-	Task{ID: id}.delete()
-	c.JSON(200, nil)
+	completed := true
+	completed_value := c.Query("completed")
+	if completed_value == "false" {
+		completed = false
+	}
+
+	task := getTask(id)
+	if task.Cookie != cookie {
+		c.JSON(401, gin.H{
+			"error": "Unauthorized",
+		})
+		return
+	}
+	task.setCompleted(completed)
 }
